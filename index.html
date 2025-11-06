@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles.css">
+</head>
+
+<body>
+    <h1>FLAMES</h1>
+    <div class="box">
+        <input type="text" id="boyname" name="boyname" placeholder="Enter boy name" required>
+        <input type="text" id="girlname" name="girlname" placeholder="Enter girl name" required>
+        <button id="btn">Find</button>
+    </div>
+    <div class="result" id="result">
+    </div>
+    <script>
+        const girl = document.getElementById('girlname');
+        const boy = document.getElementById('boyname');
+        const btn = document.getElementById('btn');
+        const result = document.getElementById('result');
+        const body = document.querySelector('body');
+
+        const timeOutOperation = () => {
+            setTimeout(() => {
+                body.classList.remove('background-active');
+                result.classList.remove('active');
+            }, 10000);
+        }
+        btn.addEventListener("click", () => {
+            let boyName = boy.value.trim();
+            let girlName = girl.value.trim();
+            const tempBoy = boyName;
+            const tempGirl = girlName;
+            boyName = boyName.toLowerCase();
+            girlName = girlName.toLowerCase();
+            if (boyName === "" || girlName === "") {
+                result.textContent = "Invalid fields ✖️";
+                body.classList.add('background-active');
+                result.classList.add('active');
+                timeOutOperation();
+                return;
+            }
+            var arr1 = [...boyName];
+            var arr2 = [...girlName];
+            for (let i = 0; i < arr1.length; i++) {
+                for (let j = 0; j < arr2.length; j++) {
+                    if (arr1[i] === arr2[j]) {
+                        arr1[i] = "1";
+                        arr2[j] = "1";
+                        break;
+                    }
+                }
+            }
+            var count = 0;
+            for (let i = 0; i < arr1.length; i++) {
+                if (arr1[i] !== "1") {
+                    count++;
+                }
+            }
+            for (let i = 0; i < arr2.length; i++) {
+                if (arr2[i] !== "1") {
+                    count++;
+                }
+            }
+            var flames = "FLAMES";
+            while (flames.length > 1) {
+                let deleteOption = (count % flames.length) - 1;
+                if (deleteOption >= 0) {
+                    flames = flames.substring(deleteOption + 1) + flames.substring(0, deleteOption);
+                } else {
+                    flames = flames.substring(0, flames.length - 1);
+                }
+            }
+            switch (flames) {
+                case "F":
+                    result.textContent = `${tempBoy} and ${tempGirl} are Friends 👫`;
+                    break;
+                case "L":
+                    result.textContent = `${tempBoy} and ${tempGirl} are Lovers ❤️`;
+                    break;
+                case "A":
+                    result.textContent = `${tempBoy} and ${tempGirl} are Attraction 💫`;
+                    break;
+                case "M":
+                    result.textContent = `${tempBoy} and ${tempGirl} are Marriage 💍`;
+                    break;
+                case "E":
+                    result.textContent = `${tempBoy} and ${tempGirl} are Enemies ⚔️`;
+                    break;
+                default:
+                    result.textContent = `${tempBoy} and ${tempGirl} are Sister 👧`;
+                    break;
+            }
+            girl.value = "";
+            boy.value = "";
+            body.classList.add('background-active');
+            result.classList.add('active');
+            timeOutOperation();
+        });
+
+    </script>
+</body>
+
+</html>
