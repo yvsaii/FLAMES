@@ -1,105 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="./styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FLAMES</title>
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-Fo3rlrZj/k7ujTnHq6M3gX2P2n5U/6Sm7YJvYQJQfR7gZLqOqQ1oF2o7Z0XJY0hC8HtXlfy0HEa+lfb6nGx8ig=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
 <body>
-    <h1>FLAMES</h1>
-    <div class="box">
-        <input type="text" id="boyname" name="boyname" placeholder="Enter boy name" required>
-        <input type="text" id="girlname" name="girlname" placeholder="Enter girl name" required>
-        <button id="btn">Find</button>
-    </div>
-    <div class="result" id="result">
-    </div>
-    <script>
-        const girl = document.getElementById('girlname');
-        const boy = document.getElementById('boyname');
-        const btn = document.getElementById('btn');
-        const result = document.getElementById('result');
-        const body = document.querySelector('body');
+  <h1>FLAMES</h1>
 
-        const timeOutOperation = () => {
-            setTimeout(() => {
-                body.classList.remove('background-active');
-                result.classList.remove('active');
-            }, 10000);
+  <div class="box">
+    <input type="text" id="boyname" placeholder="Enter boy name" required>
+    <input type="text" id="girlname" placeholder="Enter girl name" required>
+    <button id="btn">Find</button>
+  </div>
+
+  <!-- Fixed structure -->
+  <div class="result" id="result">
+    <div class="cross"><i class="fa-solid fa-xmark"></i></div>
+    <div class="output"></div>
+  </div>
+
+  <script>
+    const girl = document.getElementById('girlname');
+    const boy = document.getElementById('boyname');
+    const btn = document.getElementById('btn');
+    const result = document.getElementById('result');
+    const output = document.querySelector('.output');
+    const body = document.querySelector('body');
+    const cross = document.querySelector('.cross');
+
+    const timeOutOperation = () => {
+      setTimeout(() => {
+        body.classList.remove('background-active');
+        result.classList.remove('active');
+      }, 10000);
+    };
+
+    btn.addEventListener("click", () => {
+      let boyName = boy.value.trim().toLowerCase().replaceAll(" ","");
+      let girlName = girl.value.trim().toLowerCase().replaceAll(" ","");
+
+      if (boyName === "" || girlName === "") {
+        output.textContent = "Invalid fields ✖️";
+        body.classList.add('background-active');
+        result.classList.add('active');
+        timeOutOperation();
+        return;
+      }
+
+      let arr1 = [...boyName];
+      let arr2 = [...girlName];
+
+      for (let i = 0; i < arr1.length; i++) {
+        for (let j = 0; j < arr2.length; j++) {
+          if (arr1[i] === arr2[j]) {
+            arr1[i] = "1";
+            arr2[j] = "1";
+            break;
+          }
         }
-        btn.addEventListener("click", () => {
-            let boyName = boy.value.trim();
-            let girlName = girl.value.trim();
-            const tempBoy = boyName;
-            const tempGirl = girlName;
-            boyName = boyName.toLowerCase();
-            girlName = girlName.toLowerCase();
-            if (boyName === "" || girlName === "") {
-                result.textContent = "Invalid fields ✖️";
-                body.classList.add('background-active');
-                result.classList.add('active');
-                timeOutOperation();
-                return;
-            }
-            var arr1 = [...boyName];
-            var arr2 = [...girlName];
-            for (let i = 0; i < arr1.length; i++) {
-                for (let j = 0; j < arr2.length; j++) {
-                    if (arr1[i] === arr2[j]) {
-                        arr1[i] = "1";
-                        arr2[j] = "1";
-                        break;
-                    }
-                }
-            }
-            var count = 0;
-            for (let i = 0; i < arr1.length; i++) {
-                if (arr1[i] !== "1") {
-                    count++;
-                }
-            }
-            for (let i = 0; i < arr2.length; i++) {
-                if (arr2[i] !== "1") {
-                    count++;
-                }
-            }
-            var flames = "FLAMES";
-            while (flames.length > 1) {
-                let deleteOption = (count % flames.length) - 1;
-                if (deleteOption >= 0) {
-                    flames = flames.substring(deleteOption + 1) + flames.substring(0, deleteOption);
-                } else {
-                    flames = flames.substring(0, flames.length - 1);
-                }
-            }
-            switch (flames) {
-                case "F":
-                    result.textContent = "Friends 👫";
-                    break;
-                case "L":
-                    result.textContent ="Lovers ❤️";
-                    break;
-                case "A":
-                    result.textContent = "Attraction 💫";
-                    break;
-                case "M":
-                    result.textContent = "Marriage 💍";
-                    break;
-                case "E":
-                    result.textContent = "Enemies ⚔️";
-                    break;
-                default:
-                    result.textContent = "Sister 👧";
-                    break;
-            }
-            girl.value = "";
-            boy.value = "";
-            body.classList.add('background-active');
-            result.classList.add('active');
-            timeOutOperation();
-        });
+      }
 
-    </script>
+      let count = arr1.filter(ch => ch !== "1").length + arr2.filter(ch => ch !== "1").length;
+
+      let flames = "FLAMES";
+      while (flames.length > 1) {
+        let removeIndex = (count % flames.length) - 1;
+        if (removeIndex >= 0) {
+          flames = flames.substring(removeIndex + 1) + flames.substring(0, removeIndex);
+        } else {
+          flames = flames.substring(0, flames.length - 1);
+        }
+      }
+
+      switch (flames) {
+        case "F": output.textContent = "Friends 👫"; break;
+        case "L": output.textContent = "Lovers ❤️"; break;
+        case "A": output.textContent = "Attraction 💫"; break;
+        case "M": output.textContent = "Marriage 💍"; break;
+        case "E": output.textContent = "Enemies ⚔️"; break;
+        default: output.textContent = "Sister 👧";
+      }
+
+      girl.value = "";
+      boy.value = "";
+      body.classList.add('background-active');
+      result.classList.add('active');
+      timeOutOperation();
+    });
+
+
+    cross.addEventListener("click", () => {
+      result.classList.remove('active');
+      body.classList.remove('background-active');
+    });
+  </script>
 </body>
 </html>
